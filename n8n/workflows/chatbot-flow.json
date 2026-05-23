@@ -1,0 +1,53 @@
+{
+  "name": "UniBot — Fluxo de Chat",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "unibot",
+        "httpMethod": "POST",
+        "responseMode": "lastNode"
+      },
+      "name": "Webhook (entrada do usuário)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://backend:8000/api/chat/mensagens",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={\n  \"texto\": $json[\"texto\"],\n  \"conversa_id\": $json[\"conversa_id\"] || null\n}",
+        "headerParametersJson": "={\n  \"Authorization\": \"Bearer \" + $json[\"token\"]\n}"
+      },
+      "name": "Chama API UniBot",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [520, 300]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            { "name": "resposta", "value": "={{$json[\"resposta\"]}}" },
+            { "name": "intencao", "value": "={{$json[\"intencao\"]}}" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Formata resposta",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [800, 300]
+    }
+  ],
+  "connections": {
+    "Webhook (entrada do usuário)": {
+      "main": [[{ "node": "Chama API UniBot", "type": "main", "index": 0 }]]
+    },
+    "Chama API UniBot": {
+      "main": [[{ "node": "Formata resposta", "type": "main", "index": 0 }]]
+    }
+  }
+}

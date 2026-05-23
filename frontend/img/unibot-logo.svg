@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 60" role="img" aria-label="UniBot">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ícone: balão de chat com sparkle -->
+  <g>
+    <rect x="6" y="10" width="44" height="34" rx="10" fill="url(#g)"/>
+    <path d="M18 44 L26 52 L30 44 Z" fill="url(#g)"/>
+    <!-- olhos do bot -->
+    <circle cx="22" cy="26" r="3.5" fill="#fff"/>
+    <circle cx="34" cy="26" r="3.5" fill="#fff"/>
+    <!-- antena -->
+    <line x1="28" y1="6" x2="28" y2="11" stroke="#7C3AED" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="28" cy="5" r="2" fill="#7C3AED"/>
+  </g>
+
+  <text x="64" y="40"
+        font-family="'Segoe UI', system-ui, -apple-system, sans-serif"
+        font-size="26" font-weight="700" letter-spacing="-0.5">
+    <tspan fill="#2563EB">Uni</tspan><tspan fill="#1A1A1A">Bot</tspan>
+  </text>
+</svg>

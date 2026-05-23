@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniBot — Portal do Aluno</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="css/portal.css" />
+  <link rel="icon" type="image/svg+xml" href="img/unibot-logo.svg" />
+</head>
+<body class="login-body">
+  <main class="login-card">
+    <img src="img/unibot-logo.svg" alt="UniBot" class="login-logo" />
+
+    <h1 class="login-title">Bem-vindo!</h1>
+    <p class="login-subtitle">Acesse o Portal do Aluno para continuar.</p>
+
+    <form id="form-login" novalidate>
+      <div class="form-step" data-step="1">
+        <label class="form-label" for="cpf">CPF ou e-mail</label>
+        <input id="cpf" type="text" class="form-control" placeholder="Digite seu usuário"
+               autocomplete="username" required />
+        <button type="button" id="btn-avancar" class="btn-primary-unibot mt-3">Avançar</button>
+      </div>
+
+      <div class="form-step d-none" data-step="2">
+        <p class="form-user-display" id="user-display"></p>
+
+        <label class="form-label" for="senha">Senha</label>
+        <div class="input-with-icon">
+          <input id="senha" type="password" class="form-control" autocomplete="current-password" required />
+          <button type="button" class="btn-eye" id="btn-toggle-senha" aria-label="Mostrar senha">
+            <i class="bi bi-eye-slash"></i>
+          </button>
+        </div>
+
+        <div class="row-between mt-2">
+          <label class="check-line">
+            <input type="checkbox" id="chk-lembrar" checked />
+            <span>Lembrar-me</span>
+          </label>
+          <a href="#" class="link-recovery" id="link-esqueci">Esqueci minha senha</a>
+        </div>
+
+        <div id="alerta" class="alert-error d-none" role="alert"></div>
+
+        <button type="submit" class="btn-primary-unibot mt-3">Entrar</button>
+        <button type="button" id="btn-voltar" class="btn-link-back">Voltar</button>
+      </div>
+    </form>
+  </main>
+
+  <footer class="login-footer">
+    <p class="footer-version">UniBot · v0.1.0</p>
+  </footer>
+
+  <!-- Modal: Esqueci minha senha -->
+  <div class="modal-backdrop" id="modal-recovery" hidden>
+    <div class="modal-card" role="dialog" aria-labelledby="rec-title">
+      <button class="modal-close" id="rec-close" aria-label="Fechar">
+        <i class="bi bi-x-lg"></i>
+      </button>
+      <h2 id="rec-title">Recuperar senha</h2>
+      <p>Informe o e-mail cadastrado e enviaremos um link para redefinição.</p>
+      <form id="form-recovery">
+        <label class="form-label" for="rec-email">E-mail</label>
+        <input type="email" id="rec-email" class="form-control" required
+               placeholder="seu.email@unibot.edu.br" />
+        <p class="rec-info" id="rec-info" hidden></p>
+        <button type="submit" class="btn-primary-unibot mt-3">Enviar link</button>
+      </form>
+      <p class="rec-help">
+        Não recebeu o e-mail? Verifique a pasta de spam ou
+        escreva para <a href="mailto:suporte@unibot.edu.br">suporte@unibot.edu.br</a>.
+      </p>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniBot — Portal do Aluno</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="css/portal.css" />
+  <link rel="icon" type="image/svg+xml" href="img/unibot-logo.svg" />
+</head>
+<body class="portal-body">
+
+  <!-- ============== SIDEBAR ============== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <img src="img/unibot-logo.svg" alt="UniBot" />
+      <span class="brand-suffix">do Aluno</span>
+      <button class="sidebar-close" id="btn-sidebar-close" aria-label="Fechar menu">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegação principal">
+      <a class="nav-item" href="#inicio" data-section="inicio">
+        <i class="bi bi-house-door"></i><span>Início</span>
+      </a>
+      <a class="nav-item" href="#meu-curso" data-section="meu-curso">
+        <i class="bi bi-book"></i><span>Meu Curso</span>
+      </a>
+      <a class="nav-item" href="#financeiro" data-section="financeiro">
+        <i class="bi bi-currency-dollar"></i><span>Financeiro</span>
+      </a>
+      <a class="nav-item" href="#secretaria" data-section="secretaria">
+        <i class="bi bi-clipboard-check"></i><span>Secretaria</span>
+      </a>
+      <a class="nav-item" href="#solicitacoes" data-section="solicitacoes">
+        <i class="bi bi-card-list"></i><span>Minhas Solicitações</span>
+      </a>
+      <a class="nav-item" href="#estudar" data-section="estudar">
+        <i class="bi bi-play-btn"></i><span>Estudar</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- ============== TOPBAR ============== -->
+  <header class="topbar">
+    <button class="icon-btn hamburger" id="btn-hamburger" aria-label="Abrir menu" aria-controls="sidebar">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <div class="search-wrap">
+      <i class="bi bi-search"></i>
+      <input type="text" id="search-portal"
+             placeholder="Procure por artigos, solicitações ou serviços." />
+    </div>
+
+    <div class="topbar-actions">
+      <button class="icon-btn" title="Avisos" id="btn-avisos">
+        <i class="bi bi-megaphone"></i>
+      </button>
+
+      <div class="user-menu-wrap">
+        <button class="icon-btn has-badge" title="Notificações" id="btn-notif"
+                aria-haspopup="menu" aria-expanded="false">
+          <i class="bi bi-bell"></i><span class="badge" id="notif-badge">3</span>
+        </button>
+        <div class="notif-menu" id="notif-menu" hidden role="menu">
+          <div class="notif-head">
+            <strong>Notificações</strong>
+            <button class="notif-mark" id="notif-mark-read">Marcar todas como lidas</button>
+          </div>
+          <div class="notif-list" id="notif-list">
+            <!-- preenchido pelo JS -->
+          </div>
+          <div class="notif-foot">
+            <a href="#solicitacoes">Ver todas</a>
+          </div>
+        </div>
+      </div>
+
+      <button class="icon-btn" title="Configurações" id="btn-config">
+        <i class="bi bi-gear"></i>
+      </button>
+      <button class="icon-btn highlight" title="Falar com o UniBot" id="btn-abrir-chat">
+        <i class="bi bi-chat-dots-fill"></i>
+      </button>
+
+      <div class="user-menu-wrap">
+        <button class="user-chip" id="btn-user-menu" aria-haspopup="menu" aria-expanded="false">
+          <i class="bi bi-person-circle"></i>
+          <span class="user-chip-name" id="chip-nome"></span>
+          <i class="bi bi-caret-down-fill caret"></i>
+        </button>
+        <div class="user-menu" id="user-menu" hidden role="menu">
+          <div class="user-menu-header">
+            <strong id="menu-nome">—</strong>
+            <span id="menu-email">—</span>
+          </div>
+          <button class="user-menu-item" data-action="perfil">
+            <i class="bi bi-person"></i> Meu perfil
+          </button>
+          <button class="user-menu-item" data-action="config">
+            <i class="bi bi-gear"></i> Configurações
+          </button>
+          <div class="user-menu-sep"></div>
+          <button class="user-menu-item danger" data-action="sair">
+            <i class="bi bi-box-arrow-right"></i> Sair
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============== TOAST CONTAINER ============== -->
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <!-- ============== CONTEÚDO ============== -->
+  <main class="main-area">
+    <div id="section-content"></div>
+  </main>
+
+  <!-- ============== WIDGET UNIBOT ============== -->
+  <button id="unibot-fab" class="unibot-fab" aria-label="Abrir UniBot">
+    <i class="bi bi-chat-dots-fill"></i>
+    <span class="fab-pulse"></span>
+  </button>
+
+  <aside id="unibot-widget" class="unibot-widget" hidden>
+    <header class="widget-head">
+      <div class="widget-brand">
+        <img src="img/unibot-logo.svg" alt="UniBot" />
+      </div>
+      <div class="widget-status">
+        <span class="status-dot"></span>
+        <span>Online · responde em segundos</span>
+      </div>
+      <button class="widget-icon-btn" id="unibot-new" title="Nova conversa" aria-label="Nova conversa">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+      <button class="widget-icon-btn" id="unibot-close" title="Fechar" aria-label="Fechar">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </header>
+
+    <div class="widget-suggestions" id="unibot-suggestions">
+      <p class="suggestion-label">Sugestões rápidas</p>
+      <div class="suggestion-chips">
+        <button class="chip" data-msg="Como emito um boleto?">💳 Emitir boleto</button>
+        <button class="chip" data-msg="Como pego meu histórico?">📄 Histórico escolar</button>
+        <button class="chip" data-msg="Como emito declaração de matrícula?">📋 Declaração de matrícula</button>
+        <button class="chip" data-msg="Quando começam as aulas?">📅 Calendário</button>
+        <button class="chip" data-msg="Esqueci minha senha">🔐 Recuperar senha</button>
+        <button class="chip" data-msg="Quero falar com uma pessoa">🏢 Falar com a secretaria</button>
+      </div>
+    </div>
+
+    <div class="widget-messages" id="unibot-messages"></div>
+
+    <form class="widget-input" id="unibot-form" autocomplete="off">
+      <input id="unibot-text" type="text"
+             placeholder="Pergunte ao UniBot..." aria-label="Mensagem" required />
+      <button type="submit" id="unibot-send" aria-label="Enviar">
+        <i class="bi bi-send-fill"></i>
+      </button>
+    </form>
+  </aside>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/portal.js"></script>
+  <script src="js/unibot-widget.js"></script>
+</body>
+</html>
