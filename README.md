@@ -1,5 +1,7 @@
 # UniBot · academic assistant
 
+[![Python tests](https://github.com/LercZin/trabalho-ivone/actions/workflows/tests.yml/badge.svg)](https://github.com/LercZin/trabalho-ivone/actions/workflows/tests.yml)
+
 A collaborative university project combining academic information, institutional FAQs and an optional AI assistant in a browser-based student portal.
 
 Built for Object-Oriented Programming II / Chatbot coursework at Anhanguera. This is an **academic prototype**, not an official university service.
