@@ -79,7 +79,7 @@ const API = {
       body: JSON.stringify({ email, senha, lembrar }) }),
   enviarMensagem: (texto, conversa_id = null) =>
     apiFetch("/chat/mensagens", { method: "POST", body: JSON.stringify({ texto, conversa_id }) }),
-  historico: (conversa_id = null) =>
+  historicoChat: (conversa_id = null) =>
     apiFetch(`/chat/historico${conversa_id ? `?conversa_id=${conversa_id}` : ""}`),
   minhasDisciplinas: () => apiFetch("/disciplinas/minhas"),
   proximosPrazos:    () => apiFetch("/prazos/proximos"),

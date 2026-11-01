@@ -73,13 +73,9 @@ document.addEventListener("keydown", (e) => {
 
 recForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const email = recEmail.value.trim();
-  // O backend ainda não tem endpoint real de reset; mostramos confirmação amigável
-  // e abrimos o e-mail do suporte caso o aluno queira atendimento imediato.
-  recInfo.innerHTML =
-    `Se houver uma conta vinculada a <strong>${email}</strong>, ` +
-    `enviaremos as instruções em alguns minutos. ` +
-    `Não recebeu? Fale com <a href="mailto:suporte@unibot.edu.br">suporte@unibot.edu.br</a>.`;
+  recInfo.textContent =
+    "Esta versão de demonstração não envia e-mails de recuperação. " +
+    "Solicite ao responsável pelo ambiente a redefinição da conta.";
   recInfo.hidden = false;
 });
 

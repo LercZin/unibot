@@ -15,6 +15,7 @@ Install dependencies from `backend/requirements.txt`, then run:
 
 ```bash
 python -m pytest backend/tests -q
+node --test frontend/tests/*.test.cjs
 ```
 
 Use tests that exercise changed behavior. Database, authentication and browser changes also need appropriate integration or manual verification beyond this suite.

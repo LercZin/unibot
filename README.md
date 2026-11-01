@@ -1,6 +1,6 @@
 # UniBot · academic assistant
 
-[![Python tests](https://github.com/LercZin/trabalho-ivone/actions/workflows/tests.yml/badge.svg)](https://github.com/LercZin/trabalho-ivone/actions/workflows/tests.yml)
+[![Application tests](https://github.com/LercZin/unibot/actions/workflows/tests.yml/badge.svg)](https://github.com/LercZin/unibot/actions/workflows/tests.yml)
 
 A collaborative university project combining academic information, institutional FAQs and an optional AI assistant in a browser-based student portal.
 
@@ -71,9 +71,10 @@ With the dependencies installed, run from the repository root:
 
 ```bash
 python -m pytest backend/tests -q
+node --test frontend/tests/*.test.cjs
 ```
 
-**Verified locally on November 1, 2026: 59 tests passed.** This is a unit-test result, not end-to-end coverage, live-provider verification or production certification. CI runs the suite on pushes and pull requests.
+**Verified locally on November 1, 2026: 59 Python tests and 10 JavaScript tests passed.** JavaScript tests use Node.js 22+ and its built-in test runner with browser doubles; no npm dependencies are needed. CI runs both suites on pushes and pull requests. These checks do not certify live database, provider or browser integration.
 
 ## Repository map
 
@@ -95,6 +96,8 @@ python -m pytest backend/tests -q
 - Live-provider calls, database integration and full browser journeys need separate testing.
 - Docker Compose is a development aid. Review exposed ports, secrets, authentication and service readiness before deployment.
 - No project-wide license is currently supplied. Public visibility alone does not grant an open-source license.
+
+The frontend regression suite verifies separate chat/academic-history endpoints, token-storage transitions, expired-session behavior and truthful recovery messaging without inserting user markup into HTML.
 
 ## Contributors
 
