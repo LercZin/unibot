@@ -1,89 +1,103 @@
-# UniBot
+# UniBot · academic assistant
 
-Assistente acadêmico inteligente com chatbot (PLN) — projeto da disciplina de POO II / Chatbot da Anhanguera.
+A collaborative university project combining academic information, institutional FAQs and an optional AI assistant in a browser-based student portal.
+
+Built for Object-Oriented Programming II / Chatbot coursework at Anhanguera. This is an **academic prototype**, not an official university service.
+
+[Português: original guide](docs/README.pt-BR.md) · [Architecture](docs/architecture.md) · [Development guide](CONTRIBUTING.md)
+
+## What the project demonstrates
+
+- Python domain models for students, professors, administrators and academic records.
+- FastAPI endpoints with JWT authentication, validation and MySQL persistence.
+- Rule-based intent classification and database-backed FAQ responses.
+- Optional Anthropic integration for generated responses.
+- A student portal using HTML, CSS, JavaScript and Bootstrap.
+- Unit tests for domain behavior, grade calculations, intent detection and chatbot routing.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  Browser[Student portal] --> API[FastAPI routes]
+  API --> Services[Application services]
+  Services --> Domain[Domain models and rules]
+  Services --> Repositories[MySQL repositories]
+  Repositories --> Database[(MySQL)]
+  Services --> NLP[Intent classification]
+  Services --> AI[Optional Anthropic API]
+```
+
+The chatbot handles supported queries and FAQs using application data, and delegates to the configured provider when its routing logic calls for a generated answer. An n8n workflow is included as an optional integration artifact.
 
 ## Stack
 
-- **Backend**: Python 3.11+, FastAPI, mysql-connector-python, Pydantic, Anthropic SDK
-- **Banco**: MySQL 8.0
-- **Orquestração**: n8n (workflows visuais)
-- **IA**: Claude (Anthropic) — modelo `claude-sonnet-4-6`
-- **Frontend**: HTML5 + CSS3 + JS vanilla + Bootstrap 5
+Python 3.11+ · FastAPI · Pydantic · MySQL 8 · bcrypt · JWT · Anthropic SDK · pytest · HTML/CSS/JavaScript · Bootstrap
 
-## Estrutura
+## Run locally
 
-```
-UniBot/
-├── backend/             # API FastAPI
-│   ├── app/
-│   │   ├── core/        # config, segurança, exceções
-│   │   ├── db/          # conexão MySQL e repositórios (DAO)
-│   │   ├── domain/      # classes POO do domínio (Usuario, Estudante, ...)
-│   │   ├── routers/     # endpoints REST
-│   │   ├── schemas/     # modelos Pydantic (entrada/saída)
-│   │   ├── services/    # regras de negócio (Chatbot, NLP, Claude)
-│   │   └── main.py
-│   ├── tests/
-│   └── requirements.txt
-├── database/            # schema.sql + seed.sql
-├── frontend/            # login + chat (Bootstrap 5)
-├── n8n/workflows/       # exportação dos fluxos do n8n
-└── docker-compose.yml
-```
+Use a disposable development environment. **`database/schema.sql` drops and recreates the `unibot` database. Never run it against an existing or production database.**
 
-## Como rodar
-
-### 1) Banco
+1. Copy `.env.example` to `.env` in the repository root. Set your local database values and replace `JWT_SECRET` with a random secret. Example values are for demonstration only.
+2. Create the local schema and load the demonstration seeds using a MySQL client: `database/schema.sql`, then `database/seed.sql`, then `database/faq_seed.sql`.
+3. Create and activate a Python virtual environment, install the backend dependencies and start the API.
 
 ```bash
-mysql -u root -p < database/schema.sql
-mysql -u root -p < database/seed.sql   # opcional: dados de teste
-```
-
-### 2) Backend
-
-```bash
-cd backend
 python -m venv .venv
-.venv\Scripts\activate          # Windows
-pip install -r requirements.txt
-copy ..\.env.example ..\.env    # e preencha
-uvicorn app.main:app --reload
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+# macOS/Linux: source .venv/bin/activate
+python -m pip install -r backend/requirements.txt
+cd backend
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-API em `http://localhost:8000` — docs em `/docs`.
+API: `http://localhost:8000` · API documentation: `http://localhost:8000/docs`.
 
-### 3) Frontend
-
-Servir a pasta `frontend/` (ex.: `python -m http.server 8080` dentro dela) ou abrir `index.html` direto.
-
-### 4) n8n (opcional nessa fase)
+In a second terminal, from the repository root:
 
 ```bash
-docker run -it --rm -p 5678:5678 n8nio/n8n
+python -m http.server 8080 --bind 127.0.0.1 --directory frontend
 ```
 
-Importe os workflows de `n8n/workflows/`.
+Open `http://localhost:8080`. The frontend calls the local API on port 8000. Seed accounts and their demonstration password are documented in `database/seed.sql`; do not reuse them outside the local demo.
 
-## Mapeamento de requisitos
+Generate a JWT secret with `python -c "import secrets; print(secrets.token_urlsafe(48))"`. Live AI calls require a real `ANTHROPIC_API_KEY`; the example key is a placeholder. Unit tests mock external services and need no real provider key.
 
-Cada requisito funcional (RF01–RF15) da documentação está endereçado em uma rota ou serviço:
+## Tests
 
-| Requisito | Local |
-|---|---|
-| RF01, RF13 | `routers/usuarios.py`, `routers/admin.py` |
-| RF02 | `routers/auth.py` |
-| RF03, RF04, RF05, RF09 | `services/chatbot.py`, `services/processador_nlp.py`, `services/claude_service.py` |
-| RF06, RF11 | `routers/prazos.py` |
-| RF07, RF11 | `routers/notas.py` |
-| RF08, RF11 | `routers/materiais.py` |
-| RF10 | `routers/chat.py` (histórico) |
-| RF12 | `routers/admin.py` (relatórios) |
-| RF14 | `routers/admin.py` (base de conhecimento) |
-| RF15 | logs em `core/logging.py` |
+With the dependencies installed, run from the repository root:
 
-## Integrantes
+```bash
+python -m pytest backend/tests -q
+```
+
+**Verified locally on November 1, 2026: 59 tests passed.** This is a unit-test result, not end-to-end coverage, live-provider verification or production certification. CI runs the suite on pushes and pull requests.
+
+## Repository map
+
+| Path | Responsibility |
+| --- | --- |
+| `backend/app/domain/` | Domain objects and business rules |
+| `backend/app/routers/` | HTTP endpoints |
+| `backend/app/services/` | Authentication, chatbot routing and AI integration |
+| `backend/app/db/` | MySQL access and repositories |
+| `backend/tests/` | Unit tests |
+| `database/` | Local schema and demonstration seeds |
+| `frontend/` | Browser interface |
+| `n8n/workflows/` | Optional workflow export |
+
+## Known limitations
+
+- Password recovery is a demonstration; it does not send a reset email.
+- Some interface flows contain shortcuts for seeded demonstration users.
+- Live-provider calls, database integration and full browser journeys need separate testing.
+- Docker Compose is a development aid. Review exposed ports, secrets, authentication and service readiness before deployment.
+- No project-wide license is currently supplied. Public visibility alone does not grant an open-source license.
+
+## Contributors
 
 - Lucas Emanuel Ramos Carvalho
 - Pedro Henrick Silva de Oliveira
 - Danilo da Silva Portela
+
+This is a collaborative project; the repository does not attribute all implementation to one contributor.
