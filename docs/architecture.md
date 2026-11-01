@@ -18,6 +18,8 @@ See [`main.py`](../backend/app/main.py) for router registration and [`connection
 
 The tests in [`test_chatbot.py`](../backend/tests/test_chatbot.py) mock repositories and the provider. They validate routing and response composition without connecting to MySQL or making live AI requests.
 
+Chat reads and writes resolve the conversation through the authenticated user's ownership scope. Repository queries also include that user ID, so an internal caller cannot accidentally read or insert a message in another student's conversation. Foreign and missing conversation IDs return the same 404 response. See the [authorization review](chat-authorization.md).
+
 ## Domain model
 
 [`usuario.py`](../backend/app/domain/usuario.py) models common user behavior and student, professor and administrator variants. Other modules represent courses, enrollment, grades, deadlines and conversations.

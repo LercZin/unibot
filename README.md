@@ -74,7 +74,7 @@ python -m pytest backend/tests -q
 node --test frontend/tests/*.test.cjs
 ```
 
-**Verified locally on November 1, 2026: 59 Python tests and 10 JavaScript tests passed.** JavaScript tests use Node.js 22+ and its built-in test runner with browser doubles; no npm dependencies are needed. CI runs both suites on pushes and pull requests. These checks do not certify live database, provider or browser integration.
+**Verified locally on November 1, 2026: 75 Python tests and 11 JavaScript tests passed.** JavaScript tests use Node.js 22+ and its built-in test runner with browser doubles; no npm dependencies are needed. The Python suite includes HTTP/repository authorization tests using isolated in-memory storage and test authentication. CI runs both suites on pushes and pull requests. These checks do not certify live MySQL, provider or browser integration.
 
 ## Repository map
 
@@ -97,12 +97,16 @@ node --test frontend/tests/*.test.cjs
 - Docker Compose is a development aid. Review exposed ports, secrets, authentication and service readiness before deployment.
 - No project-wide license is currently supplied. Public visibility alone does not grant an open-source license.
 
-The frontend regression suite verifies separate chat/academic-history endpoints, token-storage transitions, expired-session behavior and truthful recovery messaging without inserting user markup into HTML.
+The frontend regression suite verifies separate chat/academic-history endpoints, token-storage transitions, expired-session behavior and truthful recovery messaging without inserting user markup into HTML. It also loads the actual API client and widget together to verify chat-history rendering. See the [authorization review](docs/chat-authorization.md) for the protected chat boundary and test scope.
 
 ## Contributors
+
+**Lucas's implementation contribution:** backend, frontend, database schema and chatbot implementation.
+
+**Academic project team:**
 
 - Lucas Emanuel Ramos Carvalho
 - Pedro Henrick Silva de Oliveira
 - Danilo da Silva Portela
 
-This is a collaborative project; the repository does not attribute all implementation to one contributor.
+The November 2026 maintenance changes add conversation ownership enforcement, bounded history queries, stable message ordering, and widget/client regression coverage. They are recorded separately in Git history from the original academic implementation.

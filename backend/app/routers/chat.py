@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from app.db.repositories.conversa_repo import ConversaRepository
 from app.dependencies import somente_estudante
@@ -24,10 +24,10 @@ def enviar_mensagem(
 @router.get("/historico", response_model=list[HistoricoItem])
 def historico(
     estudante: Annotated[Estudante, Depends(somente_estudante)],
-    conversa_id: int | None = None,
-    limite: int = 50,
+    conversa_id: Annotated[int | None, Query(gt=0)] = None,
+    limite: Annotated[int, Query(ge=1, le=100)] = 50,
 ):
-    cid = conversa_id or _conv_repo.buscar_ou_criar_ativa(estudante.id)
+    cid = _conv_repo.resolver_do_usuario(estudante.id, conversa_id)
     return [
         HistoricoItem(
             id=m.id,
@@ -36,5 +36,5 @@ def historico(
             data_envio=m.data_envio,
             intencao=m.intencao.value if m.intencao else None,
         )
-        for m in _conv_repo.listar_mensagens(cid, limite=limite)
+        for m in _conv_repo.listar_mensagens(cid, limite=limite, usuario_id=estudante.id)
     ]

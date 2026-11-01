@@ -73,10 +73,10 @@ class Chatbot:
     # ------------------------------------------------------------------ #
     def responder(self, estudante: Estudante, mensagem: str, conversa_id: int | None = None) -> dict:
         intencao = self._nlp.identificar_intencao(mensagem)
-        conv_id = conversa_id or self._conversa_repo.buscar_ou_criar_ativa(estudante.id)
+        conv_id = self._conversa_repo.resolver_do_usuario(estudante.id, conversa_id)
 
         self._conversa_repo.adicionar_mensagem(
-            conversa_id=conv_id, remetente=Remetente.USUARIO,
+            conversa_id=conv_id, usuario_id=estudante.id, remetente=Remetente.USUARIO,
             texto=mensagem, intencao=intencao,
         )
 
@@ -99,7 +99,7 @@ class Chatbot:
             texto, tokens = self._responder_via_claude(estudante, mensagem, intencao, conv_id)
 
         self._conversa_repo.adicionar_mensagem(
-            conversa_id=conv_id, remetente=Remetente.BOT,
+            conversa_id=conv_id, usuario_id=estudante.id, remetente=Remetente.BOT,
             texto=texto, intencao=intencao, tokens_usados=tokens,
         )
         return {
@@ -203,7 +203,7 @@ class Chatbot:
         historico = [
             {"role": "user" if m.remetente == Remetente.USUARIO else "assistant",
              "content": m.texto}
-            for m in self._conversa_repo.listar_mensagens(conv_id, limite=10)[:-1]
+            for m in self._conversa_repo.listar_mensagens(conv_id, limite=10, usuario_id=estudante.id)[:-1]
         ]
 
         resp = self._claude.gerar_resposta(

@@ -54,7 +54,7 @@
       <div class="bubble bot"><div class="skel skel-line medium"></div></div>
     `;
     try {
-      const msgs = await API.historico();
+      const msgs = await API.historicoChat(conversaId);
       elMensagens.innerHTML = "";
       if (msgs.length === 0) {
         adicionarBolha("bot", boasVindas());

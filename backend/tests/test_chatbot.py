@@ -38,6 +38,7 @@ def chatbot():
     """Chatbot com TODAS as dependências mockadas."""
     conversa_repo = MagicMock()
     conversa_repo.buscar_ou_criar_ativa.return_value = 42
+    conversa_repo.resolver_do_usuario.return_value = 42
     conversa_repo.adicionar_mensagem.return_value = 100
     conversa_repo.listar_mensagens.return_value = []
 
